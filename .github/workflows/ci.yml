@@ -16,6 +16,8 @@ jobs:
           node-version: 22
           cache: npm
 
+      - run: npm install -g npm@latest
+
       - run: npm ci
 
       - name: Typecheck
@@ -32,8 +34,6 @@ jobs:
 
       - name: Drizzle migration check
         env:
-          # Schema-diffing only — drizzle-kit generate doesn't open a connection
-          # for the postgresql dialect, so no real database is needed here.
           DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
         run: |
           npm run db:generate
