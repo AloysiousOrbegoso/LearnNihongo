@@ -1,0 +1,17 @@
+name: Supabase keep-alive
+
+on:
+  schedule:
+    # Every 3 days at 03:00 UTC. GitHub disables scheduled workflows after
+    # 60 days with no commit activity — see docs/OPERATIONS.md.
+    - cron: '0 3 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trivial query to keep the project awake
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: psql "$DATABASE_URL" -c "SELECT 1;"

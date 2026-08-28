@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Prettier check
+        run: npm run format:check
+
+      - name: Test
+        run: npm test
+
+      - name: Drizzle migration check
+        env:
+          # Schema-diffing only — drizzle-kit generate doesn't open a connection
+          # for the postgresql dialect, so no real database is needed here.
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+        run: |
+          npm run db:generate
+          git diff --exit-code -- drizzle/ src/lib/db/schema.ts
