@@ -1,0 +1,52 @@
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
+
+export async function middleware(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({ request });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options),
+          );
+        },
+      },
+    },
+  );
+
+  // Never add logic between createServerClient and getUser() — getUser()
+  // is what actually validates/refreshes the session; skipping straight to
+  // reading cookies risks working with a stale or expired one.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback');
+
+  if (!user && !isAuthCallback) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/sign-in';
+    return NextResponse.redirect(url);
+  }
+
+  return supabaseResponse;
+}
+
+export const config = {
+  matcher: [
+    '/decks/:path*',
+    '/review/:path*',
+    '/stats/:path*',
+    '/settings/:path*',
+    '/auth/callback',
+  ],
+};

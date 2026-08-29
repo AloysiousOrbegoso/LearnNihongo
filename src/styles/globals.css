@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+/* Furigana: kana sits above the kanji, muted, and isn't selectable text —
+   it's a reading aid, not content. */
+ruby {
+  ruby-position: over;
+}
+
+rt {
+  font-family: var(--font-jp);
+  font-size: 0.6em;
+  color: var(--color-muted);
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

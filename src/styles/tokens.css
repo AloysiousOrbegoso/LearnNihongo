@@ -1,0 +1,53 @@
+/*
+ * Design tokens — the only place color, radius, and font values are defined.
+ * Components consume these through Tailwind utilities (bg-background,
+ * text-accent, rounded-md, font-jp, …), never hardcoded values. See
+ * CLAUDE.md §6.
+ *
+ * --font-noto-sans-jp is provided at runtime by src/app/layout.tsx via
+ * next/font (Batch 2) — it doesn't exist as a literal value here.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Warm, paper-like palette */
+  --background: #fbf7f0;
+  --surface: #f3ede2;
+  --foreground: #2a2420;
+  --muted: #6b6156;
+  --border: #e3d9c8;
+  --accent: #bf3b30;
+  --accent-foreground: #fbf7f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --background: #1c1815;
+    --surface: #262019;
+    --foreground: #ede6da;
+    --muted: #a69a89;
+    --border: #3a322a;
+    --accent: #e2604f;
+    --accent-foreground: #1c1815;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-jp: var(--font-noto-sans-jp), var(--font-sans);
+}
