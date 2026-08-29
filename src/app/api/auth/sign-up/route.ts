@@ -11,7 +11,10 @@ export async function POST(request: Request) {
 
   if (!success) {
     return NextResponse.json<ApiResponse<never>>(
-      { ok: false, error: { code: 'RATE_LIMITED', message: 'Too many attempts. Try again later.' } },
+      {
+        ok: false,
+        error: { code: 'RATE_LIMITED', message: 'Too many attempts. Try again later.' },
+      },
       { status: 429 },
     );
   }
