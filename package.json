@@ -13,7 +13,8 @@
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:check": "drizzle-kit check"
+    "db:check": "drizzle-kit check",
+    "content:build": "node scripts/content-build/index.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

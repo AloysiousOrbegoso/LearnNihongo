@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Nav } from '@/components/ui/Nav';
+import { Footer } from '@/components/ui/Footer';
 
 const PUBLIC_NAV_ITEMS = [
   { href: '/kanji', label: 'Kanji' },
@@ -22,6 +23,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         }
       />
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12">{children}</main>
+      <Footer />
     </div>
   );
 }

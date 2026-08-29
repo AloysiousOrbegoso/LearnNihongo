@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Nav } from '@/components/ui/Nav';
+import { Footer } from '@/components/ui/Footer';
 
 const APP_NAV_ITEMS = [
   { href: '/decks', label: 'Decks' },
@@ -30,6 +31,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         }
       />
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12">{children}</main>
+      <Footer />
     </div>
   );
 }
