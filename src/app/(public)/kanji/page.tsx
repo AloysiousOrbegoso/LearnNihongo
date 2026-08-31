@@ -1,0 +1,18 @@
+import type { Metadata } from 'next';
+import { SearchBox } from '@/components/features/SearchBox';
+
+export const metadata: Metadata = {
+  title: 'Kanji',
+};
+
+export default function KanjiPage() {
+  return (
+    <div className="flex flex-col gap-6">
+      <h1 className="text-foreground text-2xl font-semibold">Kanji</h1>
+      <p className="text-muted">
+        Search by kanji, reading, or English meaning — e.g. 水, みず, or water.
+      </p>
+      <SearchBox kind="kanji" endpoint="/api/search/kanji" placeholder="Search kanji…" />
+    </div>
+  );
+}

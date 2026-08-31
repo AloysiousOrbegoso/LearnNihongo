@@ -3,6 +3,7 @@ import { fetchSources } from './fetch.ts';
 import { buildJmdict } from './jmdict.ts';
 import { buildKanjidic } from './kanjidic.ts';
 import { buildKanjiVg } from './kanjivg.ts';
+import { buildSearchIndices } from './search-index.ts';
 
 const OUT_DIR = fileURLToPath(new URL('../../content/', import.meta.url));
 
@@ -23,3 +24,12 @@ console.log(`kanjivg: ${kanjivgResult.count} entries, ${kanjivgResult.missing.le
 if (kanjivgResult.missing.length > 0) {
   console.log('missing literals:', kanjivgResult.missing.join(' '));
 }
+
+const searchResult = buildSearchIndices(
+  `${OUT_DIR}jmdict`,
+  `${OUT_DIR}kanjidic`,
+  `${OUT_DIR}search`,
+);
+console.log(
+  `search index: ${searchResult.vocabCount} vocab entries, ${searchResult.kanjiCount} kanji entries`,
+);

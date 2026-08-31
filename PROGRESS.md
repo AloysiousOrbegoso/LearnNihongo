@@ -6,49 +6,56 @@ Status file, not a log. **Rewrite each section - do not append.**
 
 ## Current slice
 
-Slice 2 - Content pipeline. Data pipeline complete and verified. Browsing
-pages (static kanji/vocab) not yet built.
+Slice 2 - Content pipeline. Complete: data pipeline + browsing pages, both
+verified independently on this repo's actual machine, not just a sandbox.
 
 ## Completed
 
 - Slice 0 (scaffolding), Slice 0.5 (shell), Slice 1 (auth - Google OAuth
-  verified end-to-end).
-- Gmail SMTP fixed (debugged independently). Email/password sign-up
-  confirmation delivery is no longer blocked.
-- Content pipeline (`scripts/content-build/`): fetches real jmdict-simplified
-  (common words), kanjidic2-en, and KanjiVG data; transforms and shards into
-  `content/`. Verified reproducible on two independent machines (sandbox +
-  this repo's actual Windows environment) with identical output: **22,636**
-  JMdict common-word entries, **2,136** jōyō kanji (grade 1-8), **2,136**
-  KanjiVG stroke-data entries (0 missing - full coverage of the jōyō set).
-  Total `content/` size: ~8MB.
-- `/attributions` page + `LICENSE-DATA.md` - EDRDG and KanjiVG acknowledged
-  by name, licenses linked, "modified" noted per `CONTENT.md`'s
-  requirements. `Footer` component links to it from every page.
-- `npm run content:build` script wired up; `.cache/` gitignored.
+  verified end-to-end, email/password fixed and working).
+- Content pipeline (`scripts/content-build/`): real jmdict-simplified,
+  kanjidic2-en, KanjiVG data, sharded into `content/`. 22,636 JMdict
+  entries, 2,136 jōyō kanji, 2,136 KanjiVG stroke-data entries (0 missing).
+  Reproduced identically on two independent machines.
+- **Kanji/vocab browsing pages** - bidirectional (Japanese + English)
+  search via `/api/search/{vocab,kanji}`, backed by compact server-only
+  search indices (never shipped to the browser). Static detail pages for
+  every entry (`/vocab/[id]`, `/kanji/[literal]`), `dynamicParams = false`
+  per `CONTENT.md`'s "no fallback routes" rule. Kanji detail pages render
+  real stroke order via KanjiVG data as React `<path>` elements.
+  Functionally verified working end-to-end (search, browse, detail pages)
+  on the real dev server.
+- **Measured prerendered page count: 24,780** pages, built in 94 seconds
+  (sandbox measurement) - recorded in `CONTENT.md`. Build time has large
+  headroom against Vercel's 45-minute limit; output file count (~99K) sits
+  at a threshold Vercel's docs flag for longer builds, not a documented
+  hard failure - a real Vercel deploy is still the only way to fully settle
+  this, see Open decisions.
+- `/attributions` page + `LICENSE-DATA.md`, `Footer` linking to it site-wide.
 
 ## Next up
 
-- Confirm "Confirm email" is re-enabled in Supabase (was toggled off as an
-  SMTP-debugging workaround) and that a real confirmation link has actually
-  been clicked through - resolves whether it routes through the existing
-  `/auth/callback` (`code` param) or needs a separate `verifyOtp` handler.
-  Still genuinely untested either way.
-- **Kanji/vocab browsing pages** - static pages reading from `content/`'s
-  manifests and shards at build time (`generateStaticParams`), completing
-  Slice 2 per `CLAUDE.md §9` ("content pipeline, then browsing"). This is
-  where the real prerendered-page-count number gets measured for the first
-  time - currently still blank in `CONTENT.md`.
-- Slice 3 - Decks (creation, adding cards with snapshots) once browsing
-  exists to link from.
+- Confirm the production `next build` (not just `dev`) reproduces the
+  94-second/24,780-page result on this repo's actual machine, if not
+  already done.
+- A real Vercel deploy, to settle the one thing sandbox testing can't:
+  whether Hobby actually accepts a build this size in practice.
+- Slice 3 - Decks (creation, adding cards with snapshots from the
+  kanji/vocab detail pages now that browsing exists to pull from).
 
 ## Open decisions
 
-- Jōyō-only (2,136) vs jōyō-or-JLPT (2,974, via KANJIDIC2's own `jlptLevel`
-  field) for kanji scope - currently shipping jōyō-only, closest to
-  `CONTENT.md`'s original "~2,200" guess. One-line change in `kanjidic.ts`
-  to expand if the measured build size has headroom.
-- Local Node is v24.16.0, not the v22 LTS `CLAUDE.md §3` documents - not
-  causing any issues so far, but worth reconciling doc vs. reality.
+- Jōyō-only (2,136) vs jōyō-or-JLPT (2,974) kanji scope - still shipping
+  jōyō-only. One-line change in `kanjidic.ts` if there's build-size
+  headroom to expand later.
+- Whether Vercel Hobby genuinely accepts this build size/file count in
+  production is unverified - sandbox numbers are promising (large margin
+  on build time, source files fine, output-file count at a soft caution
+  threshold with no observed slowdown) but not the same as a real deploy.
+- Local Node v24.16.0 vs. the v22 LTS `CLAUDE.md §3` documents - still
+  unreconciled, still not causing issues.
 - Migrations are manual `workflow_dispatch`; Vitest at major 4 vs. the
-  guessed 3 - both still open from earlier slices, no change.
+  guessed 3 - both still open, no change.
+- Account customization (username, etc.) explicitly deferred as a later
+  "additional feature," not part of the core build order - see
+  `FUTURE.md` (kept outside the repo, in the Claude Project).
