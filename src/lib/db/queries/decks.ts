@@ -12,13 +12,14 @@ export async function getUserDecks(userId: string) {
 }
 
 export async function getUserDecksWithCounts({ userId, now }: { userId: string; now: Date }) {
+  const nowIso = now.toISOString();
   return db
     .select({
       id: decks.id,
       name: decks.name,
       createdAt: decks.createdAt,
       cardCount: sql<number>`count(${cards.id})`.mapWith(Number),
-      dueCount: sql<number>`count(${cards.id}) filter (where ${cards.due} <= ${now})`.mapWith(
+      dueCount: sql<number>`count(${cards.id}) filter (where ${cards.due} <= ${nowIso})`.mapWith(
         Number,
       ),
     })

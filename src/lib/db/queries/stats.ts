@@ -36,13 +36,14 @@ export async function getStats({
   timezone: string;
 }): Promise<Stats> {
   const dayExpr = sql<string>`to_char(${reviewLogs.reviewedAt} at time zone ${timezone}, 'YYYY-MM-DD')`;
+  const nowIso = now.toISOString();
 
   const [stateRows, dayRows, [retentionRow]] = await Promise.all([
     db
       .select({
         state: cards.state,
         total: count(),
-        due: sql<number>`count(*) filter (where ${cards.due} <= ${now})`.mapWith(Number),
+        due: sql<number>`count(*) filter (where ${cards.due} <= ${nowIso})`.mapWith(Number),
       })
       .from(cards)
       .innerJoin(decks, eq(cards.deckId, decks.id))
