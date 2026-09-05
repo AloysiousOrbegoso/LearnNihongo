@@ -18,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ literal: string }>;
 }): Promise<Metadata> {
   const { literal } = await params;
-  return { title: literal };
+  return { title: decodeURIComponent(literal) };
 }
 
 export default async function KanjiDetailPage({
@@ -26,7 +26,8 @@ export default async function KanjiDetailPage({
 }: {
   params: Promise<{ literal: string }>;
 }) {
-  const { literal } = await params;
+  const { literal: rawLiteral } = await params;
+  const literal = decodeURIComponent(rawLiteral);
   const entry = kanjidicReader.getEntry(literal);
   if (!entry) notFound();
   const strokeData = kanjivgReader.getEntry(literal);
