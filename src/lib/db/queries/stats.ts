@@ -35,7 +35,8 @@ export async function getStats({
   now: Date;
   timezone: string;
 }): Promise<Stats> {
-  const dayExpr = sql<string>`to_char(${reviewLogs.reviewedAt} at time zone ${timezone}, 'YYYY-MM-DD')`;
+  const dayColumn =
+    sql<string>`to_char(${reviewLogs.reviewedAt} at time zone ${timezone}, 'YYYY-MM-DD')`.as('day');
   const nowIso = now.toISOString();
 
   const [stateRows, dayRows, [retentionRow]] = await Promise.all([
@@ -50,7 +51,7 @@ export async function getStats({
       .where(eq(decks.userId, userId))
       .groupBy(cards.state),
     db
-      .select({ day: dayExpr, total: count() })
+      .select({ day: dayColumn, total: count() })
       .from(reviewLogs)
       .where(
         and(
@@ -58,7 +59,7 @@ export async function getStats({
           gte(reviewLogs.reviewedAt, new Date(now.getTime() - STREAK_LOOKBACK_DAYS * DAY_MS)),
         ),
       )
-      .groupBy(dayExpr),
+      .groupBy(sql`day`),
     db
       .select({
         total: count(),
