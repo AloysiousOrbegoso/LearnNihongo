@@ -18,7 +18,7 @@ npm run dev
 ## Scripts
 
 | Script                            | Purpose                                                  |
-| ---------------------------------- | -------------------------------------------------------- |
+| --------------------------------- | -------------------------------------------------------- |
 | `npm run dev`                     | Local dev server                                         |
 | `npm run build`                   | Production build                                         |
 | `npm run typecheck`               | `tsc --noEmit`                                           |
@@ -28,7 +28,7 @@ npm run dev
 | `npm run db:generate`             | Generate a Drizzle migration from `src/lib/db/schema.ts` |
 | `npm run db:check`                | Validate committed migration snapshots                   |
 | `npm run db:migrate`              | Apply pending migrations — run manually, never on deploy |
-| `npm run content:build`           | Rebuild the JMdict/KANJIDIC2/KanjiVG content shards       |
+| `npm run content:build`           | Rebuild the JMdict/KANJIDIC2/KanjiVG content shards      |
 
 Migrations are applied to production only via the manually triggered
 "Migrate database" GitHub Actions workflow.
