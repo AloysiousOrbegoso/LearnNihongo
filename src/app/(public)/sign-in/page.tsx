@@ -1,10 +1,15 @@
+import { redirect } from 'next/navigation';
 import { AuthPanel } from '@/components/features/AuthPanel';
+import { getVerifiedUser } from '@/lib/auth/session';
 
 export default async function SignInPage({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
+  const user = await getVerifiedUser();
+  if (user) redirect('/decks');
+
   const { error } = await searchParams;
 
   return (

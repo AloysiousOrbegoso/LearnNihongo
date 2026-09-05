@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { buildDeckQuery, useDeckContext } from '@/hooks/useDeckContext';
 import type { ApiResponse } from '@/types/api';
 
 interface Result {
@@ -24,23 +25,23 @@ interface KanjiHit {
   meanings: string[];
 }
 
-function toVocabResult(hit: VocabHit): Result {
-  return {
-    href: `/vocab/${hit.id}`,
-    primary: hit.kanji || hit.kana,
-    secondary: hit.gloss,
-  };
+const DEBOUNCE_MS = 200;
+
+function toResults(kind: 'vocab' | 'kanji', hits: (VocabHit | KanjiHit)[], deckQuery: string) {
+  return kind === 'vocab'
+    ? (hits as VocabHit[]).map((hit) => ({
+        href: `/vocab/${hit.id}${deckQuery}`,
+        primary: hit.kanji || hit.kana,
+        secondary: hit.gloss,
+      }))
+    : (hits as KanjiHit[]).map((hit) => ({
+        href: `/kanji/${hit.literal}${deckQuery}`,
+        primary: hit.literal,
+        secondary: hit.meanings[0] ?? '',
+      }));
 }
 
-function toKanjiResult(hit: KanjiHit): Result {
-  return {
-    href: `/kanji/${hit.literal}`,
-    primary: hit.literal,
-    secondary: hit.meanings[0] ?? '',
-  };
-}
-
-export function SearchBox({
+function Search({
   kind,
   endpoint,
   placeholder,
@@ -49,36 +50,54 @@ export function SearchBox({
   endpoint: string;
   placeholder: string;
 }) {
+  const deck = useDeckContext();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Result[]>([]);
   const [loading, setLoading] = useState(false);
+  const deckQuery = buildDeckQuery(deck);
 
-  async function handleChange(value: string) {
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) return;
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${endpoint}?q=${encodeURIComponent(trimmed)}`, {
+          signal: controller.signal,
+        });
+        const body: ApiResponse<(VocabHit | KanjiHit)[]> = await response.json();
+        if (body.ok) setResults(toResults(kind, body.data, deckQuery));
+      } catch {
+        if (!controller.signal.aborted) setResults([]);
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    }, DEBOUNCE_MS);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, endpoint, kind, deckQuery]);
+
+  function handleChange(value: string) {
     setQuery(value);
     if (!value.trim()) {
       setResults([]);
-      return;
-    }
-    setLoading(true);
-    const response = await fetch(`${endpoint}?q=${encodeURIComponent(value)}`);
-    const body: ApiResponse<(VocabHit | KanjiHit)[]> = await response.json();
-    setLoading(false);
-    if (body.ok) {
-      setResults(
-        kind === 'vocab'
-          ? (body.data as VocabHit[]).map(toVocabResult)
-          : (body.data as KanjiHit[]).map(toKanjiResult),
-      );
+      setLoading(false);
     }
   }
 
   return (
     <div className="flex flex-col gap-4">
       <input
-        type="text"
+        type="search"
         value={query}
         onChange={(event) => handleChange(event.target.value)}
         placeholder={placeholder}
+        autoComplete="off"
         className="border-border bg-surface text-foreground rounded-md border px-4 py-2"
       />
       {loading && <p className="text-muted text-sm">Searching…</p>}
@@ -98,5 +117,17 @@ export function SearchBox({
         </ul>
       )}
     </div>
+  );
+}
+
+export function SearchBox(props: {
+  kind: 'vocab' | 'kanji';
+  endpoint: string;
+  placeholder: string;
+}) {
+  return (
+    <Suspense fallback={null}>
+      <Search {...props} />
+    </Suspense>
   );
 }

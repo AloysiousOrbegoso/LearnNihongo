@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuthAction } from '@/hooks/useAuthAction';
+import { useApiAction } from '@/hooks/useApiAction';
 import type { SignUpInput } from '@/schemas/auth';
 
 export function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState<string | null>(null);
-  const { execute, loading, error } = useAuthAction<SignUpInput, { message: string }>(
+  const { execute, loading, error } = useApiAction<SignUpInput, { message: string }>(
     '/api/auth/sign-up',
   );
 

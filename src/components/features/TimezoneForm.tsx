@@ -1,0 +1,80 @@
+'use client';
+
+import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useRouter } from 'next/navigation';
+import { useApiAction } from '@/hooks/useApiAction';
+import type { UpdateProfileInput } from '@/schemas/profile';
+
+const subscribe = () => () => {};
+
+export function TimezoneForm({ current }: { current: string }) {
+  const router = useRouter();
+  const [timezone, setTimezone] = useState(current);
+  const [saved, setSaved] = useState(false);
+  const isClient = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+  const { execute, loading, error } = useApiAction<UpdateProfileInput, { timezone: string }>(
+    '/api/profile',
+    'PATCH',
+  );
+
+  const zones = useMemo(() => {
+    if (!isClient) return [current];
+    const supported = Intl.supportedValuesOf('timeZone');
+    return supported.includes(current) ? supported : [current, ...supported];
+  }, [isClient, current]);
+
+  const browserZone = isClient ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
+
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    setSaved(false);
+    const result = await execute({ timezone });
+    if (result) {
+      setSaved(true);
+      router.refresh();
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <label className="flex flex-col gap-1 text-sm">
+        <span className="text-muted">Timezone</span>
+        <select
+          value={timezone}
+          onChange={(event) => setTimezone(event.target.value)}
+          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
+        >
+          {zones.map((zone) => (
+            <option key={zone} value={zone}>
+              {zone}
+            </option>
+          ))}
+        </select>
+      </label>
+      {browserZone && browserZone !== timezone && (
+        <button
+          type="button"
+          onClick={() => setTimezone(browserZone)}
+          className="text-accent self-start text-sm underline"
+        >
+          Use my browser&apos;s timezone ({browserZone})
+        </button>
+      )}
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={loading || timezone === current}
+          className="bg-accent text-accent-foreground rounded-md px-4 py-2 disabled:opacity-50"
+        >
+          {loading ? 'Saving…' : 'Save'}
+        </button>
+        {saved && <span className="text-muted text-sm">Saved.</span>}
+        {error && <span className="text-accent text-sm">{error}</span>}
+      </div>
+    </form>
+  );
+}

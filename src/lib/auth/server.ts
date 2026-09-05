@@ -18,9 +18,7 @@ export async function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Server Components can't set cookies — only Server Actions and
-            // Route Handlers can. Safe to ignore here because middleware
-            // (Batch C) refreshes the session on every request anyway.
+            return;
           }
         },
       },

@@ -11,3 +11,9 @@ export const authRateLimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(5, '1 m'),
   prefix: 'ratelimit:auth',
 });
+
+export const reviewRateLimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(120, '1 m'),
+  prefix: 'ratelimit:review',
+});

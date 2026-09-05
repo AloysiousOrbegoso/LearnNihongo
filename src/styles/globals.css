@@ -7,8 +7,6 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Furigana: kana sits above the kanji, muted, and isn't selectable text —
-   it's a reading aid, not content. */
 ruby {
   ruby-position: over;
 }

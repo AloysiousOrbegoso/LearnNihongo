@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuthAction } from '@/hooks/useAuthAction';
+import { useApiAction } from '@/hooks/useApiAction';
 import type { ResetPasswordInput } from '@/schemas/auth';
 
 export function ResetPasswordForm() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState<string | null>(null);
-  const { execute, loading, error } = useAuthAction<ResetPasswordInput, { message: string }>(
+  const { execute, loading, error } = useApiAction<ResetPasswordInput, { message: string }>(
     '/api/auth/reset-password',
   );
 

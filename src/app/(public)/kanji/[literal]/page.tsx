@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { kanjidicReader } from '@/lib/content/kanjidic';
 import { kanjivgReader } from '@/lib/content/kanjivg';
 import { StrokeOrder } from '@/components/features/StrokeOrder';
+import { AddToDeckButton } from '@/components/features/AddToDeckButton';
+import { DeckContextBanner } from '@/components/ui/DeckContextBanner';
 
 export const dynamicParams = false;
 
@@ -31,6 +33,7 @@ export default async function KanjiDetailPage({
 
   return (
     <div className="flex flex-col gap-6">
+      <DeckContextBanner />
       <div className="flex items-center gap-6">
         <h1 className="font-jp text-foreground text-6xl">{literal}</h1>
         {strokeData && <StrokeOrder strokes={strokeData.strokes} />}
@@ -63,6 +66,14 @@ export default async function KanjiDetailPage({
           </div>
         )}
       </dl>
+      <AddToDeckButton
+        contentSource="kanjidic"
+        contentId={literal}
+        contentVersion={kanjidicReader.getContentVersion()}
+        snapshotWord={literal}
+        snapshotReading={entry.onReadings[0] ?? entry.kunReadings[0] ?? literal}
+        snapshotGloss={entry.meanings[0] ?? literal}
+      />
     </div>
   );
 }

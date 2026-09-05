@@ -6,56 +6,58 @@ Status file, not a log. **Rewrite each section - do not append.**
 
 ## Current slice
 
-Slice 2 - Content pipeline. Complete: data pipeline + browsing pages, both
-verified independently on this repo's actual machine, not just a sandbox.
+Slice 5 complete. Core build order (0 through 5) is done: scaffolding,
+shell, auth, content pipeline + browsing, decks, review loop, stats.
 
 ## Completed
 
-- Slice 0 (scaffolding), Slice 0.5 (shell), Slice 1 (auth - Google OAuth
-  verified end-to-end, email/password fixed and working).
+- Slice 0/0.5/1 - scaffolding, shell, auth (Google OAuth + email/password,
+  both verified working).
 - Content pipeline (`scripts/content-build/`): real jmdict-simplified,
   kanjidic2-en, KanjiVG data, sharded into `content/`. 22,636 JMdict
-  entries, 2,136 jōyō kanji, 2,136 KanjiVG stroke-data entries (0 missing).
-  Reproduced identically on two independent machines.
-- **Kanji/vocab browsing pages** - bidirectional (Japanese + English)
-  search via `/api/search/{vocab,kanji}`, backed by compact server-only
-  search indices (never shipped to the browser). Static detail pages for
-  every entry (`/vocab/[id]`, `/kanji/[literal]`), `dynamicParams = false`
-  per `CONTENT.md`'s "no fallback routes" rule. Kanji detail pages render
-  real stroke order via KanjiVG data as React `<path>` elements.
-  Functionally verified working end-to-end (search, browse, detail pages)
-  on the real dev server.
-- **Measured prerendered page count: 24,780** pages, built in 94 seconds
-  (sandbox measurement) - recorded in `CONTENT.md`. Build time has large
-  headroom against Vercel's 45-minute limit; output file count (~99K) sits
-  at a threshold Vercel's docs flag for longer builds, not a documented
-  hard failure - a real Vercel deploy is still the only way to fully settle
-  this, see Open decisions.
-- `/attributions` page + `LICENSE-DATA.md`, `Footer` linking to it site-wide.
+  entries, 2,136 jōyō kanji, 2,136 KanjiVG stroke-data entries.
+- Bidirectional (Japanese + English) search via `/api/search/{vocab,kanji}`,
+  static detail pages for every entry (`dynamicParams = false`). Kanji
+  pages render real stroke order from KanjiVG data.
+- **Decks** - create/delete decks, add cards to a deck directly from a
+  kanji/vocab detail page (deck context carried via `?deckId=&deckName=`
+  query params and a client-side banner, so the dictionary pages stay
+  statically generated). Adding a card snapshots the word/reading/gloss at
+  add time so later dictionary edits don't retroactively change a saved
+  card.
+- **Review loop** - `src/lib/review/scheduler.ts` wraps `ts-fsrs` behind an
+  explicit `now` parameter (unit-tested in `scheduler.test.ts`, no wall-clock
+  dependence). `/api/review/queue` and `/api/review/answer` are rate-limited
+  and re-check deck ownership on every read/write. `/review` is a
+  keyboard-first session (space/enter to flip, 1-4 to rate) that can be
+  scoped to one deck or pull from all of them.
+- **Stats** - `/stats` shows due count, reviews today, streak (computed in
+  the user's own timezone, set on `/settings`), 30-day retention, a 14-day
+  review history bar chart, and a breakdown of cards by FSRS state.
+- `/attributions` page + `LICENSE-DATA.md`, linked from the footer
+  site-wide.
+- Migrations are tracked in `drizzle/` as three ordered files (profiles;
+  decks + cards; review_logs), each enabling row-level security with no
+  policies, applied manually via the "Migrate database" GitHub Actions
+  workflow.
+- Full check suite (typecheck, lint, format, test, build) passes clean.
+  Production build measured at 24,795 static pages in ~2 minutes.
 
 ## Next up
 
-- Confirm the production `next build` (not just `dev`) reproduces the
-  94-second/24,780-page result on this repo's actual machine, if not
-  already done.
-- A real Vercel deploy, to settle the one thing sandbox testing can't:
-  whether Hobby actually accepts a build this size in practice.
-- Slice 3 - Decks (creation, adding cards with snapshots from the
-  kanji/vocab detail pages now that browsing exists to pull from).
+- A real Vercel deploy, to confirm Hobby accepts this build size in
+  practice (sandbox numbers have comfortable headroom on build time; output
+  file count sits at a soft caution threshold in Vercel's own docs, not a
+  documented hard failure).
+- Account customization (display name, avatar) - still an optional
+  later addition, not part of the core build order.
+- Consider widening kanji coverage from jōyō-only (2,136) to
+  jōyō-or-JLPT (2,974) if build-size headroom allows - one-line change in
+  `kanjidic.ts`.
 
 ## Open decisions
 
-- Jōyō-only (2,136) vs jōyō-or-JLPT (2,974) kanji scope - still shipping
-  jōyō-only. One-line change in `kanjidic.ts` if there's build-size
-  headroom to expand later.
+- Jōyō-only vs. jōyō-or-JLPT kanji scope - still shipping jōyō-only.
 - Whether Vercel Hobby genuinely accepts this build size/file count in
-  production is unverified - sandbox numbers are promising (large margin
-  on build time, source files fine, output-file count at a soft caution
-  threshold with no observed slowdown) but not the same as a real deploy.
-- Local Node v24.16.0 vs. the v22 LTS `CLAUDE.md §3` documents - still
-  unreconciled, still not causing issues.
-- Migrations are manual `workflow_dispatch`; Vitest at major 4 vs. the
-  guessed 3 - both still open, no change.
-- Account customization (username, etc.) explicitly deferred as a later
-  "additional feature," not part of the core build order - see
-  `FUTURE.md` (kept outside the repo, in the Claude Project).
+  production is unverified outside the sandbox.
+- Vitest is pinned at major 4; no issues observed.

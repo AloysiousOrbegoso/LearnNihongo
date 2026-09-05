@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Stagger } from '@/components/motion/Stagger';
 import { Reveal } from '@/components/motion/Reveal';
 
@@ -16,9 +17,18 @@ export default function Home() {
           , one card at a time.
         </h1>,
         <p key="body" className="text-muted max-w-prose">
-          Learn Nihongo through spaced repetition. This is Slice 0.5: shell only, no accounts or
-          decks yet.
+          Look up any word or kanji, save it to a deck, and let spaced repetition decide when you
+          see it again. The dictionary is open to everyone; sign in to keep decks and track your
+          progress.
         </p>,
+        <div key="actions" className="flex flex-wrap gap-3">
+          <Link href="/vocab" className="bg-accent text-accent-foreground rounded-md px-4 py-2">
+            Browse vocabulary
+          </Link>
+          <Link href="/kanji" className="border-border text-foreground rounded-md border px-4 py-2">
+            Browse kanji
+          </Link>
+        </div>,
       ]}
     </Stagger>
   );

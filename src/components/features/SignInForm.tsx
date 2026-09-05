@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthAction } from '@/hooks/useAuthAction';
+import { useApiAction } from '@/hooks/useApiAction';
 import type { SignInInput } from '@/schemas/auth';
 
 export function SignInForm() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { execute, loading, error } = useAuthAction<SignInInput, { redirectTo: string }>(
+  const { execute, loading, error } = useApiAction<SignInInput, { redirectTo: string }>(
     '/api/auth/sign-in',
   );
 
