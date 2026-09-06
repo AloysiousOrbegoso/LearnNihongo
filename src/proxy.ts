@@ -41,8 +41,12 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/home/:path*',
     '/decks/:path*',
     '/review/:path*',
+    '/kana/:path*',
+    '/sentences/:path*',
+    '/trivia/:path*',
     '/stats/:path*',
     '/settings/:path*',
     '/auth/callback',

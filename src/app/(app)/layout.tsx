@@ -4,11 +4,9 @@ import { Footer } from '@/components/ui/Footer';
 import { SignOutButton } from '@/components/features/SignOutButton';
 
 const APP_NAV_ITEMS = [
+  { href: '/home', label: 'Home' },
   { href: '/decks', label: 'Decks' },
-  { href: '/review', label: 'Review' },
   { href: '/stats', label: 'Stats' },
-  { href: '/kanji', label: 'Kanji' },
-  { href: '/vocab', label: 'Vocab' },
   { href: '/settings', label: 'Settings' },
 ];
 
@@ -16,7 +14,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <Nav
-        brandHref="/decks"
+        brandHref="/home"
         brandLabel="NihongoLearn"
         items={APP_NAV_ITEMS}
         action={<SignOutButton />}

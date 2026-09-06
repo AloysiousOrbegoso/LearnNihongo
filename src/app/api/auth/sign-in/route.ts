@@ -54,6 +54,6 @@ export async function POST(request: Request) {
 
   return NextResponse.json<ApiResponse<{ redirectTo: string }>>({
     ok: true,
-    data: { redirectTo: '/decks' },
+    data: { redirectTo: '/home' },
   });
 }

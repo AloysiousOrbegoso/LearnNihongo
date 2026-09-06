@@ -9,10 +9,10 @@ export function AuthNavAction() {
 
   return (
     <Link
-      href={signedIn ? '/decks' : '/sign-in'}
+      href={signedIn ? '/home' : '/sign-in'}
       className="bg-accent text-accent-foreground rounded-md px-3 py-1.5"
     >
-      {signedIn ? 'My decks' : 'Sign in'}
+      {signedIn ? 'Dashboard' : 'Sign in'}
     </Link>
   );
 }

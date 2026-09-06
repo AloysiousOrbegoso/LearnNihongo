@@ -8,7 +8,7 @@ export default async function SignInPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const user = await getVerifiedUser();
-  if (user) redirect('/decks');
+  if (user) redirect('/home');
 
   const { error } = await searchParams;
 
