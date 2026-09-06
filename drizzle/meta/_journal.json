@@ -36,6 +36,13 @@
       "when": 1788647013431,
       "tag": "0004_sentences",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788653709735,
+      "tag": "0005_profile_customization",
+      "breakpoints": true
     }
   ]
 }

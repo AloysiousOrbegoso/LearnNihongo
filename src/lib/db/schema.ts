@@ -13,6 +13,8 @@ import {
 export const profiles = pgTable('profiles', {
   id: uuid('id').primaryKey(),
   timezone: text('timezone').notNull(),
+  displayName: text('display_name'),
+  avatar: text('avatar'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
 

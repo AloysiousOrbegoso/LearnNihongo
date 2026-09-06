@@ -11,11 +11,22 @@ export async function getProfile(id: string) {
   return profile ?? null;
 }
 
-export async function updateProfileTimezone({ id, timezone }: { id: string; timezone: string }) {
-  const [profile] = await db
-    .update(profiles)
-    .set({ timezone })
-    .where(eq(profiles.id, id))
-    .returning();
+export async function updateProfile({
+  id,
+  timezone,
+  displayName,
+  avatar,
+}: {
+  id: string;
+  timezone?: string;
+  displayName?: string | null;
+  avatar?: string | null;
+}) {
+  const changes: Partial<typeof profiles.$inferInsert> = {};
+  if (timezone !== undefined) changes.timezone = timezone;
+  if (displayName !== undefined) changes.displayName = displayName;
+  if (avatar !== undefined) changes.avatar = avatar;
+
+  const [profile] = await db.update(profiles).set(changes).where(eq(profiles.id, id)).returning();
   return profile ?? null;
 }

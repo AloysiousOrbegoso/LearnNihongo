@@ -80,10 +80,17 @@ Daily Trivia.
   correctness-risk reason as Sentence Builder above.
 - `/attributions` page + `LICENSE-DATA.md`, linked from the footer
   site-wide.
-- Migrations are tracked in `drizzle/` as five ordered files (profiles;
+- **Account customization** - `/settings` has an Account section with a
+  display name field and a preset emoji avatar picker (18 options, no file
+  upload/storage bucket needed). Both are optional and nullable; the
+  "Signed in as" line falls back to email when no display name is set.
+  Same `/api/profile` PATCH endpoint as the timezone form, extended to
+  accept any subset of `{timezone, displayName, avatar}`.
+- Migrations are tracked in `drizzle/` as six ordered files (profiles;
   decks + cards; review_logs; kana_mastery + kana_exams; sentence_mastery +
-  sentence_exams), each enabling row-level security with no policies,
-  applied manually via the "Migrate database" GitHub Actions workflow.
+  sentence_exams; profile display_name/avatar columns), each enabling row-
+  level security with no policies, applied manually via the "Migrate
+  database" GitHub Actions workflow.
 - Full check suite (typecheck, lint, format, test, build) passes clean.
   Production build measured at 24,805 static pages in ~75 seconds.
 
@@ -97,8 +104,6 @@ Daily Trivia.
   examples per connector) if the exercise pool starts feeling repetitive
   in practice. The simple tier's curated vocabulary bank (251 words) can
   also grow over time.
-- Account customization (display name, avatar) - still an optional
-  later addition, not part of the core build order.
 - Consider widening kanji coverage from jōyō-only (2,136) to
   jōyō-or-JLPT (2,974) if build-size headroom allows - one-line change in
   `kanjidic.ts`.
