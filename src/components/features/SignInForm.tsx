@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApiAction } from '@/hooks/useApiAction';
 import type { SignInInput } from '@/schemas/auth';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 export function SignInForm() {
   const router = useRouter();
@@ -23,30 +25,24 @@ export function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-3">
-      <input
+      <Input
         type="email"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Email"
         required
-        className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
       />
-      <input
+      <Input
         type="password"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         placeholder="Password"
         required
-        className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
       />
       {error && <p className="text-accent text-sm">{error}</p>}
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-accent text-accent-foreground rounded-md px-4 py-2 disabled:opacity-50"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? 'Signing in…' : 'Sign in'}
-      </button>
+      </Button>
     </form>
   );
 }

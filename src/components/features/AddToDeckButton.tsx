@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useDeckContext } from '@/hooks/useDeckContext';
 import type { ApiResponse } from '@/types/api';
+import { Button } from '@/components/ui/Button';
 
 interface Deck {
   id: string;
@@ -21,9 +22,6 @@ interface Payload {
 }
 
 type LoadState = 'loading' | 'no-decks' | 'ready' | 'error';
-
-const buttonClass =
-  'bg-accent text-accent-foreground rounded-md px-3 py-1.5 text-sm disabled:opacity-50';
 
 async function submitCard(deckId: string, payload: Payload) {
   try {
@@ -59,9 +57,9 @@ function FixedDeckAdd({ deck, payload }: { deck: Deck; payload: Payload }) {
 
   return (
     <div className="flex items-center gap-2">
-      <button type="button" onClick={handleAdd} disabled={saving} className={buttonClass}>
+      <Button type="button" size="sm" onClick={handleAdd} disabled={saving}>
         {saving ? 'Adding…' : `Add to ${deck.name}`}
-      </button>
+      </Button>
       {message && <span className="text-muted text-sm">{message}</span>}
     </div>
   );
@@ -128,7 +126,7 @@ function DeckPickerAdd({ payload }: { payload: Payload }) {
       <select
         value={selectedDeckId}
         onChange={(event) => setSelectedDeckId(event.target.value)}
-        className="border-border bg-surface text-foreground rounded-md border px-2 py-1 text-sm"
+        className="border-border bg-surface text-foreground rounded-lg border px-2 py-1.5 text-sm"
       >
         {decks.map((deck) => (
           <option key={deck.id} value={deck.id}>
@@ -136,9 +134,9 @@ function DeckPickerAdd({ payload }: { payload: Payload }) {
           </option>
         ))}
       </select>
-      <button type="button" onClick={handleAdd} disabled={saving} className={buttonClass}>
+      <Button type="button" size="sm" onClick={handleAdd} disabled={saving}>
         {saving ? 'Adding…' : 'Add to deck'}
-      </button>
+      </Button>
       {message && <span className="text-muted text-sm">{message}</span>}
     </div>
   );

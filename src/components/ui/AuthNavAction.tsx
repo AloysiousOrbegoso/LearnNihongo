@@ -1,18 +1,15 @@
 'use client';
 
-import Link from 'next/link';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { LinkButton } from '@/components/ui/Button';
 
 export function AuthNavAction() {
   const status = useCurrentUser();
   const signedIn = status === 'signed-in';
 
   return (
-    <Link
-      href={signedIn ? '/home' : '/sign-in'}
-      className="bg-accent text-accent-foreground rounded-md px-3 py-1.5"
-    >
+    <LinkButton href={signedIn ? '/home' : '/sign-in'} size="sm">
       {signedIn ? 'Dashboard' : 'Sign in'}
-    </Link>
+    </LinkButton>
   );
 }

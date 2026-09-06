@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { buildDeckQuery, useDeckContext } from '@/hooks/useDeckContext';
 import type { ApiResponse } from '@/types/api';
+import { Input } from '@/components/ui/Input';
 
 interface Result {
   href: string;
@@ -92,22 +93,21 @@ function Search({
 
   return (
     <div className="flex flex-col gap-4">
-      <input
+      <Input
         type="search"
         value={query}
         onChange={(event) => handleChange(event.target.value)}
         placeholder={placeholder}
         autoComplete="off"
-        className="border-border bg-surface text-foreground rounded-md border px-4 py-2"
       />
       {loading && <p className="text-muted text-sm">Searching…</p>}
       {results.length > 0 && (
-        <ul className="divide-border border-border flex flex-col divide-y rounded-md border">
+        <ul className="card-shadow divide-border border-border flex flex-col divide-y overflow-hidden rounded-xl border">
           {results.map((result) => (
             <li key={result.href}>
               <Link
                 href={result.href}
-                className="hover:bg-surface flex items-baseline justify-between px-4 py-3"
+                className="hover:bg-surface-sunken flex items-baseline justify-between px-4 py-3"
               >
                 <span className="font-jp text-foreground text-lg">{result.primary}</span>
                 <span className="text-muted text-sm">{result.secondary}</span>

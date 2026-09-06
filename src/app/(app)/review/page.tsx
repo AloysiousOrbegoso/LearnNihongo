@@ -24,7 +24,7 @@ export default async function ReviewPage({
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="text-foreground text-2xl font-semibold">
+        <h1 className="text-foreground text-3xl font-extrabold">
           Review{deck ? `: ${deck.name}` : ''}
         </h1>
         {deck ? (

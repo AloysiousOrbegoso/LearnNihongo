@@ -5,6 +5,8 @@ import { kanjivgReader } from '@/lib/content/kanjivg';
 import { StrokeOrder } from '@/components/features/StrokeOrder';
 import { AddToDeckButton } from '@/components/features/AddToDeckButton';
 import { DeckContextBanner } from '@/components/ui/DeckContextBanner';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
 
 export const dynamicParams = false;
 
@@ -35,10 +37,16 @@ export default async function KanjiDetailPage({
   return (
     <div className="flex flex-col gap-6">
       <DeckContextBanner />
-      <div className="flex items-center gap-6">
-        <h1 className="font-jp text-foreground text-6xl">{literal}</h1>
+      <Card className="flex flex-col gap-6 sm:flex-row sm:items-center">
+        <div className="bg-surface-sunken flex h-32 w-32 shrink-0 items-center justify-center rounded-xl">
+          <h1 className="font-jp text-foreground text-7xl">{literal}</h1>
+        </div>
         {strokeData && <StrokeOrder strokes={strokeData.strokes} />}
-      </div>
+        <div className="flex flex-wrap gap-2">
+          <Badge tone="accent">{entry.strokeCount} strokes</Badge>
+          {entry.grade !== null && <Badge tone="gold">Grade {entry.grade}</Badge>}
+        </div>
+      </Card>
       <dl className="flex flex-col gap-3 text-sm">
         <div>
           <dt className="text-muted">Meanings</dt>
@@ -54,16 +62,6 @@ export default async function KanjiDetailPage({
           <div>
             <dt className="text-muted">Kun readings</dt>
             <dd className="font-jp text-foreground">{entry.kunReadings.join('、')}</dd>
-          </div>
-        )}
-        <div>
-          <dt className="text-muted">Stroke count</dt>
-          <dd className="text-foreground">{entry.strokeCount}</dd>
-        </div>
-        {entry.grade !== null && (
-          <div>
-            <dt className="text-muted">Grade</dt>
-            <dd className="text-foreground">{entry.grade}</dd>
           </div>
         )}
       </dl>

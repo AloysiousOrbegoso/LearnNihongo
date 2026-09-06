@@ -27,7 +27,7 @@ export default async function SentenceExamPage({ params }: { params: Promise<{ t
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-foreground text-2xl font-semibold capitalize">{tier} Exam</h1>
+      <h1 className="text-foreground text-3xl font-extrabold capitalize">{tier} Exam</h1>
       <SentenceExamSession tier={tier} />
     </div>
   );

@@ -1,10 +1,12 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getVerifiedUser } from '@/lib/auth/session';
 import { getMasterySummary } from '@/lib/db/queries/kana';
 import { EXAM_SIZES } from '@/lib/kana/exam';
 import type { KanaScript } from '@/lib/content/kana';
+import { Card } from '@/components/ui/Card';
+import { ProgressBar } from '@/components/ui/ProgressBar';
+import { LinkButton } from '@/components/ui/Button';
 
 export const metadata: Metadata = {
   title: 'Kana Practice',
@@ -23,7 +25,7 @@ export default async function KanaPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-foreground text-2xl font-semibold">Kana Practice</h1>
+      <h1 className="text-foreground text-3xl font-extrabold">Kana Practice</h1>
       <p className="text-muted text-sm">
         Practice freely any time. Progress only updates after you take an exam.
       </p>
@@ -32,37 +34,25 @@ export default async function KanaPage() {
         const percent = stats.total === 0 ? 0 : Math.round((stats.mastered / stats.total) * 100);
 
         return (
-          <section
-            key={key}
-            className="border-border bg-surface flex flex-col gap-4 rounded-lg border p-6"
-          >
+          <Card key={key} className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-foreground text-lg font-semibold">{label}</h2>
+              <h2 className="text-foreground text-lg font-bold">{label}</h2>
               <span className="text-muted text-sm">
                 {stats.mastered} / {stats.total} mastered ({percent}%)
               </span>
             </div>
-            <div className="bg-background h-2 overflow-hidden rounded-full">
-              <div className="bg-accent h-full rounded-full" style={{ width: `${percent}%` }} />
-            </div>
+            <ProgressBar value={stats.mastered} max={stats.total} tone="success" />
             <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href={`/kana/practice?script=${key}`}
-                className="border-border text-foreground rounded-md border px-3 py-1.5 text-sm"
-              >
+              <LinkButton href={`/kana/practice?script=${key}`} variant="ghost" size="sm">
                 Practice
-              </Link>
+              </LinkButton>
               {EXAM_SIZES.map((size) => (
-                <Link
-                  key={size}
-                  href={`/kana/exam?script=${key}&size=${size}`}
-                  className="bg-accent text-accent-foreground rounded-md px-3 py-1.5 text-sm"
-                >
+                <LinkButton key={size} href={`/kana/exam?script=${key}&size=${size}`} size="sm">
                   Exam ({size})
-                </Link>
+                </LinkButton>
               ))}
             </div>
-          </section>
+          </Card>
         );
       })}
     </div>

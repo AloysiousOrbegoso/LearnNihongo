@@ -38,7 +38,7 @@ export default async function SentencePracticePage({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-foreground text-2xl font-semibold capitalize">{tier} Practice</h1>
+      <h1 className="text-foreground text-3xl font-extrabold capitalize">{tier} Practice</h1>
       <SentencePractice tier={tier} simpleExamples={simpleExamples} />
     </div>
   );

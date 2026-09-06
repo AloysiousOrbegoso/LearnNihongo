@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useApiAction } from '@/hooks/useApiAction';
+import { Button } from '@/components/ui/Button';
 
 export function SignOutButton() {
   const router = useRouter();
@@ -18,13 +19,8 @@ export function SignOutButton() {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      disabled={loading}
-      className="border-border text-muted hover:text-foreground rounded-md border px-3 py-1.5 disabled:opacity-50"
-    >
+    <Button type="button" variant="ghost" size="sm" onClick={handleClick} disabled={loading}>
       {loading ? 'Signing out…' : 'Sign out'}
-    </button>
+    </Button>
   );
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { ApiResponse } from '@/types/api';
 import type { SentenceTier } from '@/lib/content/sentences';
+import { LinkButton } from '@/components/ui/Button';
 
 interface SlotFillQuestion {
   kind: 'slotfill';
@@ -148,13 +149,22 @@ export function SentenceExamSession({ tier }: { tier: SentenceTier }) {
   if (phase === 'done' && result) {
     return (
       <div className="flex flex-col gap-6">
-        <p className="text-foreground text-xl">
-          Score: {result.correctCount} / {result.total}
-        </p>
-        <ul className="divide-border border-border flex flex-col divide-y rounded-md border">
+        <div className="card-shadow border-border bg-surface flex flex-col items-center gap-2 rounded-2xl border px-6 py-8 text-center">
+          <span className="text-4xl" aria-hidden>
+            {result.correctCount === result.total ? '🎉' : '✏️'}
+          </span>
+          <p className="text-foreground text-xl font-bold">
+            Score: {result.correctCount} / {result.total}
+          </p>
+        </div>
+        <ul className="card-shadow divide-border border-border flex flex-col divide-y overflow-hidden rounded-xl border">
           {result.results.map((r, i) => (
             <li key={i} className="flex flex-col gap-1 px-4 py-2 text-sm">
-              <span className={r.correct ? 'text-foreground' : 'text-accent'}>
+              <span
+                className={
+                  r.correct ? 'text-success-strong font-medium' : 'text-accent-strong font-medium'
+                }
+              >
                 {r.correct ? 'Correct' : 'Missed'}
               </span>
               <span className="font-jp text-foreground">
@@ -163,9 +173,9 @@ export function SentenceExamSession({ tier }: { tier: SentenceTier }) {
             </li>
           ))}
         </ul>
-        <Link href="/sentences" className="text-foreground text-sm underline">
+        <LinkButton href="/sentences" variant="ghost" size="sm" className="self-start">
           Back to Sentence Builder
-        </Link>
+        </LinkButton>
       </div>
     );
   }
@@ -177,7 +187,7 @@ export function SentenceExamSession({ tier }: { tier: SentenceTier }) {
       <span className="text-muted text-sm">
         Question {index + 1} / {questions.length}
       </span>
-      <div className="border-border bg-surface flex flex-col items-center gap-4 rounded-lg border px-6 py-10 text-center">
+      <div className="card-shadow border-border bg-surface flex flex-col items-center gap-4 rounded-2xl border px-6 py-10 text-center">
         <p className="font-jp text-foreground text-3xl">
           {current.kind === 'slotfill' ? current.jp : current.english}
         </p>
@@ -191,7 +201,7 @@ export function SentenceExamSession({ tier }: { tier: SentenceTier }) {
               key={choice.id}
               type="button"
               onClick={() => chooseSlotFill(choice.id)}
-              className="border-border bg-surface hover:bg-background flex flex-col rounded-md border px-4 py-3 text-left"
+              className="border-border bg-surface hover:border-accent/50 hover:bg-accent/5 flex flex-col rounded-xl border px-4 py-3 text-left transition-colors"
             >
               <span className="font-jp text-foreground text-lg">{choice.headword}</span>
               <span className="text-muted text-xs">{choice.gloss}</span>
@@ -205,7 +215,7 @@ export function SentenceExamSession({ tier }: { tier: SentenceTier }) {
               key={choice}
               type="button"
               onClick={() => chooseConnector(choice)}
-              className="font-jp border-border bg-surface hover:bg-background rounded-md border px-4 py-3 text-left text-lg"
+              className="font-jp border-border bg-surface hover:border-accent/50 hover:bg-accent/5 rounded-xl border px-4 py-3 text-left text-lg transition-colors"
             >
               {choice}
             </button>

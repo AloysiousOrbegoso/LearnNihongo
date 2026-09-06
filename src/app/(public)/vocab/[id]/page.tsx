@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { jmdictReader } from '@/lib/content/jmdict';
 import { AddToDeckButton } from '@/components/features/AddToDeckButton';
 import { DeckContextBanner } from '@/components/ui/DeckContextBanner';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
 
 export const dynamicParams = false;
 
@@ -33,16 +35,20 @@ export default async function VocabDetailPage({ params }: { params: Promise<{ id
   return (
     <div className="flex flex-col gap-6">
       <DeckContextBanner />
-      <div>
-        <h1 className="font-jp text-foreground text-4xl">{headword}</h1>
+      <Card className="flex flex-col gap-2">
+        <h1 className="font-jp text-foreground text-4xl font-bold">{headword}</h1>
         {entry.kanji.length > 0 && <p className="font-jp text-muted text-lg">{reading}</p>}
-      </div>
+      </Card>
       <ol className="flex flex-col gap-3">
         {entry.senses.map((sense, i) => (
-          <li key={i} className="flex flex-col gap-1">
-            <span className="text-muted text-xs tracking-wide uppercase">
-              {sense.partOfSpeech.join(', ')}
-            </span>
+          <li key={i} className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-1.5">
+              {sense.partOfSpeech.map((pos) => (
+                <Badge key={pos} tone="accent-2">
+                  {pos}
+                </Badge>
+              ))}
+            </div>
             <span className="text-foreground">{sense.glosses.join('; ')}</span>
           </li>
         ))}

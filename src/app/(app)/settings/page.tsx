@@ -19,7 +19,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-foreground text-2xl font-semibold">Settings</h1>
+      <h1 className="text-foreground text-3xl font-extrabold">Settings</h1>
 
       <section className="flex flex-col gap-3">
         <h2 className="text-foreground text-lg font-semibold">Account</h2>

@@ -4,6 +4,7 @@ import { useMemo, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApiAction } from '@/hooks/useApiAction';
 import type { UpdateProfileInput } from '@/schemas/profile';
+import { Button } from '@/components/ui/Button';
 
 const subscribe = () => () => {};
 
@@ -46,7 +47,7 @@ export function TimezoneForm({ current }: { current: string }) {
         <select
           value={timezone}
           onChange={(event) => setTimezone(event.target.value)}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
+          className="border-border bg-surface text-foreground rounded-lg border px-3.5 py-2.5"
         >
           {zones.map((zone) => (
             <option key={zone} value={zone}>
@@ -65,13 +66,9 @@ export function TimezoneForm({ current }: { current: string }) {
         </button>
       )}
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={loading || timezone === current}
-          className="bg-accent text-accent-foreground rounded-md px-4 py-2 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={loading || timezone === current}>
           {loading ? 'Saving…' : 'Save'}
-        </button>
+        </Button>
         {saved && <span className="text-muted text-sm">Saved.</span>}
         {error && <span className="text-accent text-sm">{error}</span>}
       </div>

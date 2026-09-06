@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { getKanaSet, type KanaScript } from '@/lib/content/kana';
+import { Button } from '@/components/ui/Button';
 
 function shuffledIndexes(length: number) {
   const indexes = Array.from({ length }, (_, i) => i);
@@ -11,6 +12,11 @@ function shuffledIndexes(length: number) {
   }
   return indexes;
 }
+
+const SCRIPTS: { key: KanaScript; label: string }[] = [
+  { key: 'hiragana', label: 'Hiragana' },
+  { key: 'katakana', label: 'Katakana' },
+];
 
 export function KanaFlashcards({ initialScript }: { initialScript: KanaScript }) {
   const [script, setScript] = useState<KanaScript>(initialScript);
@@ -41,23 +47,23 @@ export function KanaFlashcards({ initialScript }: { initialScript: KanaScript })
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-4 text-sm">
-        <button
-          type="button"
-          onClick={() => switchScript('hiragana')}
-          className={script === 'hiragana' ? 'text-foreground font-semibold' : 'text-muted'}
-        >
-          Hiragana
-        </button>
-        <button
-          type="button"
-          onClick={() => switchScript('katakana')}
-          className={script === 'katakana' ? 'text-foreground font-semibold' : 'text-muted'}
-        >
-          Katakana
-        </button>
+      <div className="bg-surface-sunken flex gap-1 rounded-full p-1 text-sm">
+        {SCRIPTS.map((s) => (
+          <button
+            key={s.key}
+            type="button"
+            onClick={() => switchScript(s.key)}
+            className={`flex-1 rounded-full px-3 py-1.5 font-semibold transition-colors ${
+              script === s.key
+                ? 'bg-accent text-accent-foreground'
+                : 'text-muted hover:text-foreground'
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
       </div>
-      <div className="border-border bg-surface flex flex-col items-center gap-6 rounded-lg border px-6 py-16 text-center">
+      <div className="card-shadow border-border bg-surface flex flex-col items-center gap-6 rounded-2xl border px-6 py-16 text-center">
         <span className="text-muted text-xs">
           {position + 1} / {order.length}
         </span>
@@ -65,30 +71,18 @@ export function KanaFlashcards({ initialScript }: { initialScript: KanaScript })
         {revealed ? (
           <p className="text-foreground text-2xl">{current.romaji}</p>
         ) : (
-          <button
-            type="button"
-            onClick={() => setRevealed(true)}
-            className="bg-accent text-accent-foreground rounded-md px-4 py-2"
-          >
+          <Button type="button" onClick={() => setRevealed(true)}>
             Show romaji
-          </button>
+          </Button>
         )}
       </div>
       <div className="flex gap-3">
-        <button
-          type="button"
-          onClick={next}
-          className="bg-accent text-accent-foreground rounded-md px-4 py-2"
-        >
+        <Button type="button" onClick={next}>
           Next
-        </button>
-        <button
-          type="button"
-          onClick={reshuffle}
-          className="border-border text-foreground rounded-md border px-4 py-2"
-        >
+        </Button>
+        <Button type="button" variant="ghost" onClick={reshuffle}>
           Reshuffle
-        </button>
+        </Button>
       </div>
       <p className="text-muted text-xs">
         Practice doesn&apos;t affect your mastery progress — take an exam to update it.

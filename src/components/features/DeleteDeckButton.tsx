@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useApiAction } from '@/hooks/useApiAction';
+import { Button } from '@/components/ui/Button';
 
 export function DeleteDeckButton({ deckId, deckName }: { deckId: string; deckName: string }) {
   const router = useRouter();
@@ -21,14 +22,9 @@ export function DeleteDeckButton({ deckId, deckName }: { deckId: string; deckNam
 
   return (
     <div className="flex items-center gap-2">
-      <button
-        type="button"
-        onClick={handleClick}
-        disabled={loading}
-        className="border-border text-muted hover:text-accent rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
-      >
+      <Button type="button" variant="ghost" size="sm" onClick={handleClick} disabled={loading}>
         {loading ? 'Deleting…' : 'Delete deck'}
-      </button>
+      </Button>
       {error && <span className="text-accent text-sm">{error}</span>}
     </div>
   );

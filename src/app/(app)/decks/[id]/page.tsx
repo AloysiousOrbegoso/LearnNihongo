@@ -1,5 +1,4 @@
 import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
 import { getVerifiedUser } from '@/lib/auth/session';
 import { getDeck } from '@/lib/db/queries/decks';
 import { getDeckCards } from '@/lib/db/queries/cards';
@@ -7,6 +6,7 @@ import { formatInterval } from '@/lib/review/scheduler';
 import { isUuid } from '@/lib/uuid';
 import { DeleteDeckButton } from '@/components/features/DeleteDeckButton';
 import { RemoveCardButton } from '@/components/features/RemoveCardButton';
+import { LinkButton } from '@/components/ui/Button';
 
 const STATE_LABELS: Record<number, string> = {
   0: 'New',
@@ -33,38 +33,29 @@ export default async function DeckDetailPage({ params }: { params: Promise<{ id:
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-foreground text-2xl font-semibold">{deck.name}</h1>
+        <h1 className="text-foreground text-3xl font-extrabold">{deck.name}</h1>
         <span className="text-muted text-sm">
           {cards.length} {cards.length === 1 ? 'card' : 'cards'} · {dueCount} due
         </span>
       </div>
       <div className="flex flex-wrap gap-2">
         {dueCount > 0 && (
-          <Link
-            href={`/review?deckId=${deck.id}`}
-            className="bg-accent text-accent-foreground rounded-md px-3 py-1.5 text-sm"
-          >
+          <LinkButton href={`/review?deckId=${deck.id}`} size="sm">
             Review ({dueCount})
-          </Link>
+          </LinkButton>
         )}
-        <Link
-          href={`/kanji${deckQuery}`}
-          className="border-border text-foreground rounded-md border px-3 py-1.5 text-sm"
-        >
+        <LinkButton href={`/kanji${deckQuery}`} variant="ghost" size="sm">
           Add kanji
-        </Link>
-        <Link
-          href={`/vocab${deckQuery}`}
-          className="border-border text-foreground rounded-md border px-3 py-1.5 text-sm"
-        >
+        </LinkButton>
+        <LinkButton href={`/vocab${deckQuery}`} variant="ghost" size="sm">
           Add vocab
-        </Link>
+        </LinkButton>
         <DeleteDeckButton deckId={deck.id} deckName={deck.name} />
       </div>
       {cards.length === 0 ? (
         <p className="text-muted">No cards yet. Use Add kanji or Add vocab to fill this deck.</p>
       ) : (
-        <ul className="divide-border border-border flex flex-col divide-y rounded-md border">
+        <ul className="card-shadow divide-border border-border flex flex-col divide-y overflow-hidden rounded-xl border">
           {cards.map((card) => (
             <li key={card.id} className="flex items-baseline gap-4 px-4 py-3">
               <span className="font-jp text-foreground text-lg">{card.snapshotWord}</span>

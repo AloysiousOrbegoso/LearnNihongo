@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { ApiResponse } from '@/types/api';
 import type { KanaScript } from '@/lib/content/kana';
+import { LinkButton } from '@/components/ui/Button';
 
 interface Question {
   character: string;
@@ -110,23 +111,30 @@ export function KanaExamSession({ script, size }: { script: KanaScript; size: nu
   if (phase === 'done' && result) {
     return (
       <div className="flex flex-col gap-6">
-        <p className="text-foreground text-xl">
-          Score: {result.correctCount} / {result.total}
-        </p>
-        <ul className="divide-border border-border flex flex-col divide-y rounded-md border">
+        <div className="card-shadow border-border bg-surface flex flex-col items-center gap-2 rounded-2xl border px-6 py-8 text-center">
+          <span className="text-4xl" aria-hidden>
+            {result.correctCount === result.total ? '🎉' : '✏️'}
+          </span>
+          <p className="text-foreground text-xl font-bold">
+            Score: {result.correctCount} / {result.total}
+          </p>
+        </div>
+        <ul className="card-shadow divide-border border-border flex flex-col divide-y overflow-hidden rounded-xl border">
           {result.results.map((r) => (
             <li key={r.character} className="flex items-center justify-between px-4 py-2 text-sm">
               <span className="font-jp text-foreground text-lg">{r.character}</span>
-              <span className={r.correct ? 'text-foreground' : 'text-accent'}>
+              <span
+                className={r.correct ? 'text-success-strong font-medium' : 'text-accent-strong'}
+              >
                 {r.selected}
                 {!r.correct && ` (${r.correctRomaji})`}
               </span>
             </li>
           ))}
         </ul>
-        <Link href="/kana" className="text-foreground text-sm underline">
+        <LinkButton href="/kana" variant="ghost" size="sm" className="self-start">
           Back to Kana
-        </Link>
+        </LinkButton>
       </div>
     );
   }
@@ -138,7 +146,7 @@ export function KanaExamSession({ script, size }: { script: KanaScript; size: nu
       <span className="text-muted text-sm">
         Question {index + 1} / {questions.length}
       </span>
-      <div className="border-border bg-surface flex flex-col items-center gap-6 rounded-lg border px-6 py-16 text-center">
+      <div className="card-shadow border-border bg-surface flex flex-col items-center gap-6 rounded-2xl border px-6 py-16 text-center">
         <p className="font-jp text-foreground text-7xl">{current.character}</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -147,7 +155,7 @@ export function KanaExamSession({ script, size }: { script: KanaScript; size: nu
             key={choice}
             type="button"
             onClick={() => choose(choice)}
-            className="border-border bg-surface hover:bg-background rounded-md border px-4 py-3 text-lg"
+            className="border-border bg-surface hover:border-accent/50 hover:bg-accent/5 rounded-xl border px-4 py-3 text-lg font-medium transition-colors"
           >
             {choice}
           </button>

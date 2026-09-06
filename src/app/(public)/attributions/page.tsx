@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Card } from '@/components/ui/Card';
 
 export const metadata: Metadata = {
   title: 'Attributions',
@@ -34,7 +35,7 @@ const DATASETS = [
 export default function AttributionsPage() {
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-foreground text-2xl font-semibold">Attributions</h1>
+      <h1 className="text-foreground text-3xl font-extrabold">Attributions</h1>
       <p className="text-muted max-w-prose">
         This app&apos;s kanji and vocabulary data comes from the following open datasets. All were
         modified for use here — filtered, re-shaped, and split into shards for runtime lookups. Full
@@ -43,8 +44,8 @@ export default function AttributionsPage() {
       </p>
       <div className="flex flex-col gap-6">
         {DATASETS.map((dataset) => (
-          <div key={dataset.name} className="border-border rounded-md border p-4">
-            <h2 className="text-foreground font-semibold">{dataset.name}</h2>
+          <Card key={dataset.name}>
+            <h2 className="text-foreground font-bold">{dataset.name}</h2>
             <p className="text-muted text-sm">
               Source:{' '}
               <a href={dataset.sourceHref} className="hover:text-foreground underline">
@@ -68,7 +69,7 @@ export default function AttributionsPage() {
               )}
             </p>
             <p className="text-muted text-sm">Modified: yes</p>
-          </div>
+          </Card>
         ))}
       </div>
     </div>

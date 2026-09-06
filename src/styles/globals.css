@@ -7,6 +7,32 @@ body {
   font-family: var(--font-sans);
 }
 
+.btn-chunky {
+  box-shadow: 0 4px 0 0 var(--btn-shadow, transparent);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
+}
+
+.btn-chunky:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 var(--btn-shadow, transparent);
+}
+
+.card-shadow {
+  box-shadow:
+    0 1px 2px rgb(32 24 16 / 0.06),
+    0 4px 12px rgb(32 24 16 / 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .card-shadow {
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.3),
+      0 4px 16px rgb(0 0 0 / 0.35);
+  }
+}
+
 ruby {
   ruby-position: over;
 }

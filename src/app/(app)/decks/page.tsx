@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getVerifiedUser } from '@/lib/auth/session';
 import { getUserDecksWithCounts } from '@/lib/db/queries/decks';
 import { CreateDeckForm } from '@/components/features/CreateDeckForm';
+import { LinkButton } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 
 export default async function DecksPage() {
   const user = await getVerifiedUser();
@@ -14,32 +16,32 @@ export default async function DecksPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-foreground text-2xl font-semibold">Decks</h1>
+        <h1 className="text-foreground text-3xl font-extrabold">Decks</h1>
         {totalDue > 0 && (
-          <Link
-            href="/review"
-            className="bg-accent text-accent-foreground rounded-md px-3 py-1.5 text-sm"
-          >
+          <LinkButton href="/review" size="sm">
             Review all ({totalDue} due)
-          </Link>
+          </LinkButton>
         )}
       </div>
       <CreateDeckForm />
       {decks.length === 0 ? (
         <p className="text-muted">No decks yet. Create one, then add kanji or vocabulary to it.</p>
       ) : (
-        <ul className="divide-border border-border flex flex-col divide-y rounded-md border">
+        <ul className="card-shadow divide-border border-border flex flex-col divide-y overflow-hidden rounded-xl border">
           {decks.map((deck) => (
             <li key={deck.id} className="flex items-center justify-between gap-4 px-4 py-3">
-              <Link href={`/decks/${deck.id}`} className="text-foreground flex-1 hover:underline">
+              <Link
+                href={`/decks/${deck.id}`}
+                className="text-foreground flex-1 font-medium hover:underline"
+              >
                 {deck.name}
               </Link>
               <span className="text-muted text-sm">
-                {deck.cardCount} {deck.cardCount === 1 ? 'card' : 'cards'} · {deck.dueCount} due
+                {deck.cardCount} {deck.cardCount === 1 ? 'card' : 'cards'}
               </span>
               {deck.dueCount > 0 && (
-                <Link href={`/review?deckId=${deck.id}`} className="text-accent text-sm underline">
-                  Review
+                <Link href={`/review?deckId=${deck.id}`}>
+                  <Badge tone="accent">{deck.dueCount} due</Badge>
                 </Link>
               )}
             </li>

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { ApiResponse } from '@/types/api';
+import { Button } from '@/components/ui/Button';
 
 interface QueueCard {
   id: string;
@@ -18,10 +19,14 @@ interface QueueCard {
 type Phase = 'loading' | 'error' | 'empty' | 'front' | 'back';
 
 const RATINGS = [
-  { value: 1, label: 'Again' },
-  { value: 2, label: 'Hard' },
-  { value: 3, label: 'Good' },
-  { value: 4, label: 'Easy' },
+  { value: 1, label: 'Again', tone: 'bg-accent/15 text-accent-strong hover:bg-accent/25' },
+  { value: 2, label: 'Hard', tone: 'bg-gold/20 text-gold-strong hover:bg-gold/30' },
+  {
+    value: 3,
+    label: 'Good',
+    tone: 'bg-accent-2/15 text-accent-2-strong hover:bg-accent-2/25',
+  },
+  { value: 4, label: 'Easy', tone: 'bg-success/15 text-success-strong hover:bg-success/25' },
 ];
 
 function isTypingTarget(target: EventTarget | null) {
@@ -151,8 +156,11 @@ export function ReviewSession({ deckId }: { deckId?: string }) {
       )}
 
       {phase === 'empty' && (
-        <div className="border-border bg-surface flex flex-col items-center gap-4 rounded-lg border px-6 py-12 text-center">
-          <p className="text-foreground text-lg">All caught up.</p>
+        <div className="card-shadow border-border bg-surface flex flex-col items-center gap-4 rounded-2xl border px-6 py-12 text-center">
+          <span className="text-4xl" aria-hidden>
+            🎉
+          </span>
+          <p className="text-foreground text-lg font-bold">All caught up.</p>
           <p className="text-muted text-sm">
             {reviewed > 0
               ? 'Cards you marked Again will come back once their short interval passes.'
@@ -170,8 +178,10 @@ export function ReviewSession({ deckId }: { deckId?: string }) {
       )}
 
       {showCard && (
-        <div className="border-border bg-surface flex flex-col items-center gap-6 rounded-lg border px-6 py-12 text-center">
-          <span className="text-muted text-xs tracking-wide uppercase">{current.deckName}</span>
+        <div className="card-shadow border-border bg-surface flex flex-col items-center gap-6 rounded-2xl border px-6 py-12 text-center">
+          <span className="text-muted text-xs font-semibold tracking-wide uppercase">
+            {current.deckName}
+          </span>
           <p className="font-jp text-foreground text-6xl">{current.word}</p>
           {phase === 'back' ? (
             <div className="flex flex-col gap-2">
@@ -181,13 +191,9 @@ export function ReviewSession({ deckId }: { deckId?: string }) {
               <p className="text-foreground text-lg">{current.gloss}</p>
             </div>
           ) : (
-            <button
-              type="button"
-              onClick={() => setPhase('back')}
-              className="bg-accent text-accent-foreground rounded-md px-4 py-2"
-            >
+            <Button type="button" onClick={() => setPhase('back')}>
               Show answer
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -200,11 +206,11 @@ export function ReviewSession({ deckId }: { deckId?: string }) {
               type="button"
               disabled={submitting}
               onClick={() => answer(rating.value)}
-              className="border-border bg-surface hover:bg-background flex flex-col items-center gap-1 rounded-md border px-3 py-3 disabled:opacity-50"
+              className={`flex flex-col items-center gap-1 rounded-xl px-3 py-3 transition-colors disabled:opacity-50 ${rating.tone}`}
             >
-              <span className="text-foreground font-medium">{rating.label}</span>
-              <span className="text-muted text-xs">{current.intervals[rating.value]}</span>
-              <kbd className="text-muted text-xs">{rating.value}</kbd>
+              <span className="font-bold">{rating.label}</span>
+              <span className="text-xs opacity-80">{current.intervals[rating.value]}</span>
+              <kbd className="text-xs opacity-60">{rating.value}</kbd>
             </button>
           ))}
         </div>

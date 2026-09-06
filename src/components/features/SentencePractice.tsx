@@ -6,6 +6,8 @@ import {
   getConnectorsForTier,
   type SentenceTier,
 } from '@/lib/content/sentences';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 
 function shuffledIndexes(length: number) {
   const indexes = Array.from({ length }, (_, i) => i);
@@ -34,11 +36,11 @@ function SimplePractice({ examples }: { examples: SimpleExample[] }) {
 
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-foreground text-lg font-semibold">Practice</h2>
+      <h2 className="text-foreground text-lg font-bold">Practice</h2>
       <p className="text-muted text-sm">
         Each example draws a fresh real word from the dictionary — click Next for a new one.
       </p>
-      <div className="border-border bg-surface flex flex-col items-center gap-6 rounded-lg border px-6 py-12 text-center">
+      <div className="card-shadow border-border bg-surface flex flex-col items-center gap-6 rounded-2xl border px-6 py-12 text-center">
         <span className="text-muted text-xs">
           {position + 1} / {order.length}
         </span>
@@ -46,22 +48,14 @@ function SimplePractice({ examples }: { examples: SimpleExample[] }) {
         {revealed ? (
           <p className="font-jp text-foreground text-2xl">{current.jp}</p>
         ) : (
-          <button
-            type="button"
-            onClick={() => setRevealed(true)}
-            className="bg-accent text-accent-foreground rounded-md px-4 py-2"
-          >
+          <Button type="button" onClick={() => setRevealed(true)}>
             Show answer
-          </button>
+          </Button>
         )}
       </div>
-      <button
-        type="button"
-        onClick={next}
-        className="bg-accent text-accent-foreground self-start rounded-md px-4 py-2"
-      >
+      <Button type="button" onClick={next} className="self-start">
         Next
-      </button>
+      </Button>
       <p className="text-muted text-xs">
         Practice doesn&apos;t affect your mastery progress — take an exam to update it.
       </p>
@@ -84,23 +78,20 @@ function ConnectorPractice({ tier }: { tier: 'compound' | 'complex' }) {
   return (
     <>
       <section className="flex flex-col gap-4">
-        <h2 className="text-foreground text-lg font-semibold">Connectors in this tier</h2>
+        <h2 className="text-foreground text-lg font-bold">Connectors in this tier</h2>
         {getConnectorsForTier(tier).map((lesson) => (
-          <div
-            key={lesson.id}
-            className="border-border bg-surface flex flex-col gap-1 rounded-md border p-4"
-          >
+          <Card key={lesson.id} className="flex flex-col gap-1">
             <span className="font-jp text-foreground text-xl">{lesson.label}</span>
             <p className="text-muted text-sm">{lesson.explanation}</p>
             <p className="font-jp text-foreground">{lesson.example}</p>
             <p className="text-muted text-xs">{lesson.exampleEnglish}</p>
-          </div>
+          </Card>
         ))}
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-foreground text-lg font-semibold">Practice</h2>
-        <div className="border-border bg-surface flex flex-col items-center gap-6 rounded-lg border px-6 py-12 text-center">
+        <h2 className="text-foreground text-lg font-bold">Practice</h2>
+        <div className="card-shadow border-border bg-surface flex flex-col items-center gap-6 rounded-2xl border px-6 py-12 text-center">
           <span className="text-muted text-xs">
             {position + 1} / {order.length}
           </span>
@@ -108,22 +99,14 @@ function ConnectorPractice({ tier }: { tier: 'compound' | 'complex' }) {
           {revealed ? (
             <p className="font-jp text-foreground text-2xl">{current.correct}</p>
           ) : (
-            <button
-              type="button"
-              onClick={() => setRevealed(true)}
-              className="bg-accent text-accent-foreground rounded-md px-4 py-2"
-            >
+            <Button type="button" onClick={() => setRevealed(true)}>
               Show answer
-            </button>
+            </Button>
           )}
         </div>
-        <button
-          type="button"
-          onClick={next}
-          className="bg-accent text-accent-foreground self-start rounded-md px-4 py-2"
-        >
+        <Button type="button" onClick={next} className="self-start">
           Next
-        </button>
+        </Button>
         <p className="text-muted text-xs">
           Practice doesn&apos;t affect your mastery progress — take an exam to update it.
         </p>

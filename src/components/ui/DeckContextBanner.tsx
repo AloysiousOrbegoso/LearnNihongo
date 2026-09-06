@@ -9,7 +9,7 @@ function Banner() {
   if (!deck) return null;
 
   return (
-    <div className="border-accent bg-surface flex items-center justify-between rounded-md border px-4 py-2 text-sm">
+    <div className="border-accent/40 bg-accent/10 flex items-center justify-between rounded-xl border px-4 py-2.5 text-sm">
       <span className="text-foreground">
         Adding to: <span className="font-semibold">{deck.name}</span>
       </span>

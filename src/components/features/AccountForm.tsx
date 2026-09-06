@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useApiAction } from '@/hooks/useApiAction';
 import { AVATAR_OPTIONS } from '@/schemas/profile';
 import type { AvatarOption, UpdateProfileInput } from '@/schemas/profile';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 function asAvatarOption(value: string | null): AvatarOption | null {
   return (AVATAR_OPTIONS as readonly string[]).includes(value ?? '')
@@ -49,13 +51,12 @@ export function AccountForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <label className="flex flex-col gap-1 text-sm">
         <span className="text-muted">Display name</span>
-        <input
+        <Input
           type="text"
           value={name}
           onChange={(event) => setName(event.target.value)}
           maxLength={40}
           placeholder="Your name"
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
         />
       </label>
 
@@ -68,10 +69,10 @@ export function AccountForm({
               type="button"
               onClick={() => setAvatar(option === avatar ? null : option)}
               aria-pressed={option === avatar}
-              className={`flex h-10 w-10 items-center justify-center rounded-md border text-xl ${
+              className={`flex h-10 w-10 items-center justify-center rounded-xl border text-xl transition-colors ${
                 option === avatar
                   ? 'border-accent bg-accent/10'
-                  : 'border-border bg-surface hover:bg-background'
+                  : 'border-border bg-surface hover:bg-surface-sunken'
               }`}
             >
               {option}
@@ -81,13 +82,9 @@ export function AccountForm({
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={loading || unchanged}
-          className="bg-accent text-accent-foreground rounded-md px-4 py-2 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={loading || unchanged}>
           {loading ? 'Saving…' : 'Save'}
-        </button>
+        </Button>
         {saved && <span className="text-muted text-sm">Saved.</span>}
         {error && <span className="text-accent text-sm">{error}</span>}
       </div>

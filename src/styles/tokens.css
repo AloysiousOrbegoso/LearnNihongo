@@ -1,41 +1,74 @@
 :root {
   color-scheme: light;
 
-  --background: #fbf7f0;
-  --surface: #f3ede2;
+  --background: #fbf6ec;
+  --surface: #ffffff;
+  --surface-sunken: #f4ecdc;
   --foreground: #2a2420;
-  --muted: #6b6156;
-  --border: #e3d9c8;
-  --accent: #bf3b30;
-  --accent-foreground: #fbf7f0;
+  --muted: #7a6f5f;
+  --border: #e8dcc4;
+  --accent: #d1382a;
+  --accent-strong: #a8281d;
+  --accent-foreground: #fff9f2;
+  --accent-2: #2c4d6e;
+  --accent-2-strong: #1e3750;
+  --accent-2-foreground: #fdf9f0;
+  --success: #4f8b5b;
+  --success-strong: #396a43;
+  --success-foreground: #fdf9f0;
+  --gold: #d19a3d;
+  --gold-strong: #a9791f;
+  --shadow-color: 32 24 16;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
 
-    --background: #1c1815;
-    --surface: #262019;
-    --foreground: #ede6da;
-    --muted: #a69a89;
-    --border: #3a322a;
-    --accent: #e2604f;
-    --accent-foreground: #1c1815;
+    --background: #1c1712;
+    --surface: #2a231b;
+    --surface-sunken: #221c16;
+    --foreground: #f3e9d8;
+    --muted: #b3a48d;
+    --border: #423527;
+    --accent: #ea6b52;
+    --accent-strong: #c94e38;
+    --accent-foreground: #241009;
+    --accent-2: #7ea8d1;
+    --accent-2-strong: #5786af;
+    --accent-2-foreground: #0d1b28;
+    --success: #7fbd8a;
+    --success-strong: #5b9968;
+    --success-foreground: #0c1f10;
+    --gold: #e3b95f;
+    --gold-strong: #b98f3a;
+    --shadow-color: 0 0 0;
   }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-2: var(--accent-2);
+  --color-accent-2-strong: var(--accent-2-strong);
+  --color-accent-2-foreground: var(--accent-2-foreground);
+  --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
+  --color-success-foreground: var(--success-foreground);
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
 
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.85rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-jp: var(--font-noto-sans-jp), var(--font-sans);

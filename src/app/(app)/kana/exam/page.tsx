@@ -26,7 +26,7 @@ export default async function KanaExamPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-foreground text-2xl font-semibold">Exam</h1>
+      <h1 className="text-foreground text-3xl font-extrabold">Exam</h1>
       <KanaExamSession script={script} size={parsedSize} />
     </div>
   );

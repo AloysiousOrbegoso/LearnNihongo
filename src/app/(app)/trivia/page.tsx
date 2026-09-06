@@ -31,9 +31,12 @@ export default async function TriviaPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-foreground text-2xl font-semibold">Daily Trivia</h1>
+      <h1 className="text-foreground text-3xl font-extrabold">Daily Trivia</h1>
       <p className="text-muted text-sm">{day}</p>
-      <div className="border-border bg-surface flex flex-col items-center gap-4 rounded-lg border px-6 py-12 text-center">
+      <div className="card-shadow border-border bg-surface flex flex-col items-center gap-4 rounded-2xl border px-6 py-12 text-center">
+        <span className="text-3xl" aria-hidden>
+          🎴
+        </span>
         <h2 className="font-jp text-foreground text-5xl">{headword}</h2>
         {entry.kanji.length > 0 && <p className="font-jp text-muted text-xl">{reading}</p>}
         <p className="text-foreground text-lg">{gloss}</p>

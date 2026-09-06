@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useApiAction } from '@/hooks/useApiAction';
 import type { SignUpInput } from '@/schemas/auth';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 export function SignUpForm() {
   const [email, setEmail] = useState('');
@@ -22,32 +24,26 @@ export function SignUpForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-3">
-      <input
+      <Input
         type="email"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Email"
         required
-        className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
       />
-      <input
+      <Input
         type="password"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         placeholder="Password"
         required
         minLength={8}
-        className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
       />
       {error && <p className="text-accent text-sm">{error}</p>}
       {message && <p className="text-muted text-sm">{message}</p>}
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-accent text-accent-foreground rounded-md px-4 py-2 disabled:opacity-50"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? 'Creating account…' : 'Create account'}
-      </button>
+      </Button>
     </form>
   );
 }
