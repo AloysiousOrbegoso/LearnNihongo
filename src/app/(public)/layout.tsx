@@ -9,6 +9,10 @@ const PUBLIC_NAV_ITEMS = [
   { href: '/attributions', label: 'Attributions' },
 ];
 
+// Widened from max-w-3xl so the landing page can use the room. Pages that
+// genuinely want a narrow reading column (kanji/vocab detail, attributions,
+// sign-in) apply their own `mx-auto max-w-2xl` wrapper internally instead of
+// inheriting one here -- see PROGRESS.md for which pages still need that.
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
@@ -18,7 +22,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         items={PUBLIC_NAV_ITEMS}
         action={<AuthNavAction />}
       />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12">{children}</main>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">{children}</main>
       <Footer />
     </div>
   );

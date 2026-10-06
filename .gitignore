@@ -8,7 +8,7 @@
 !.yarn/releases
 !.yarn/versions
 scripts/content-build/.cache/
-
+nscripts/content-build/.cache-*/
 # testing
 /coverage
 
@@ -39,3 +39,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+scripts/content-build/.cache-tatoeba/
